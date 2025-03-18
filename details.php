@@ -19,23 +19,9 @@ $result = mysqli_query($con,$query);
 $author = mysqli_fetch_assoc($result);
 
 
-if($_SERVER['REQUEST_METHOD'] == 'GET')
-{
-
-
-
-if(empty($_GET['id']))
+if($_SERVER['REQUEST_METHOD'] == 'GET' && empty($_GET['id']))
 {
     header("Location: index.php");
-
-}
-
-
-
-
-
-
-
 }
 else if($_SERVER['REQUEST_METHOD'] == 'POST')
 {

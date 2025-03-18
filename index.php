@@ -34,6 +34,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']))
 
 
 
+
     if(!empty($_FILES['image']['name']))
         {
             $folder = 'uploads/';
@@ -49,6 +50,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']))
 
         }
 
+
+
+
+    
     $query = "INSERT INTO posts(title,post,image,user_id,date,category) VALUES('$title','$content','$image','$user_id','$date'
     ,'$category'
     )";
@@ -57,6 +62,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']))
     $NOW = strtotime("now");
     $query = "UPDATE users SET last_post = '$NOW' WHERE id = '$user_id'";
     $result_last_post = mysqli_query($con,$query);
+      
+    
+
     $_SESSION['user']['last_post'] = $NOW;
 
 
@@ -201,9 +209,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']))
 ?>
 <?php } else { ?>
 
-    <div class="jumbotron text-center">
+    <div class="jumbotron text-center row justify-content-center">
   <h1 class="display-4">Strona główna</h1>
-  <p class="lead">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos ipsam explicabo eligendi libero corrupti inventore accusamus distinctio eos exercitationem dolore dicta aperiam.</p>
+  <p class="lead col-6 text-center">Na tej stronie znajdziesz posty dotyczące różnych zagadnień matematycznych. Zawierają one omówienia teorii, 
+    przykłady zastosowań oraz rozwiązania problemów matematycznych.
+     Treści obejmują zarówno podstawowe koncepcje, jak i bardziej zaawansowane tematy. 
+     Celem strony jest dostarczanie precyzyjnych i rzeczowych informacji, które mogą być 
+     przydatne w nauce, pracy lub analizie matematycznej.</p>
   <hr class="my-4">
   <p class="text-warning">Pamiętaj o regulaminie dotyczącym użytkowania strony</p>
   
@@ -265,11 +277,12 @@ while($row = mysqli_fetch_assoc($result))
 {
 
 $text_len = strlen($row['post']);
-$text_good = substr($row['post'],0,150);
-if($text_len > 150)
+$text_good = substr($row['post'],0,50);
+if($text_len > 50)
 {
-  $text_good .= '<br><br>' . 'Click image to view more';
+  $text_good .= '...<br>' . 'Click image to view more';
 }
+
 
 
 $author_name = get_author_name($row['user_id'],$con);

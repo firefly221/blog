@@ -89,56 +89,123 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 </head>
 <body>
     
+
+
 <?php 
     include 'header.php';
 
 ?>
 
+<?php 
 
-<div class="jumbotron text-center mb-5">
-  <h1 class="display-4">Witaj <?= $_SESSION['user']['username'] ?></h1>
-  <p class="lead">To jest strona, na której możesz edytować swój profil oraz oglądać komentarze, które napisałeś</p>
-  <hr class="my-4">
-  <p class="text-warning">Pamiętaj o regulaminie dotyczącym kont użytkownika</p>
-  
-</div>
+  $id = $_SESSION['user']['id'];
+
+  $query = "SELECT * FROM comments WHERE user_id = '$id'";
+
+  $result_comments = mysqli_query($con,$query);
+
+  $no_of_comments = mysqli_num_rows($result_comments);
+
+?>
+
+
+
+<?php 
+
+$id = $_SESSION['user']['id'];
+$query = "SELECT * FROM posts WHERE user_id = '$id'";
+
+$result_posts = mysqli_query($con,$query);
+
+$no_of_posts = mysqli_num_rows($result_posts);
+
+
+
+?>
+
+
+
+
+
+
+
 
 
 <?php if (empty($_GET['action'])) {?>
-<div class="container text-center">
-  
-<div class="row">
-    <div class="col">
-  <img src="<?php 
-    if($_SESSION['user']['image'])
-    {
-        echo $_SESSION['user']['image'];
-    }
-    else
-    {
-        echo "pic.jpeg";
-    }
-  
-  
-  ?>" class="rounded" width="300px">
-</div>
-</div>
 
 
-<div class="row align-items-start d-flex justify-content-center">
-    <div class="col-sm-5 gy-5">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta aliquam tenetur et nostrum nihil doloremque molestias. Praesentium, ratione quibusdam impedit tempore ipsa quas sed nostrum cum quod, minima, similique earum!
-    </div>
-    </div>
-    
-  
-  
-  <div class="row">
-    <div class="col gy-5">
-    <a href="user.php?action=edit"><button class="btn btn-warning">Edytuj zdjęcie</button></a>
+
+  <section class="w-100 px-4 py-5" style="border-radius: .5rem .5rem 0 0;">
+  <div class="row d-flex justify-content-center">
+    <div class="col col-md-9 col-lg-7 col-xl-6">
+      <div class="card" style="border-radius: 15px;">
+        <div class="card-body p-4">
+          <div class="d-flex">
+            <div class="flex-shrink-0">
+              <img src="<?php 
+                if($_SESSION['user']['image'])
+                {
+                  echo $_SESSION['user']['image'];
+                }
+                else
+                {
+                  echo 'pic.jpeg';
+                }
+              
+              ?>"
+                alt="Generic placeholder image" class="img-fluid" style="width: 180px; border-radius: 10px;">
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <h5 class="mb-1"><?= $_SESSION['user']['username'] ?></h5>
+              <div class="d-flex justify-content-start rounded-3 p-2 mb-2 bg-body-tertiary">
+                <div>
+                  <p class="small text-muted mb-1">Posty</p>
+                  <p class="mb-0"><?= $no_of_posts ?></p>
+                </div>
+                
+                <div class="px-3">
+                  <p class="small text-muted mb-1">Komentarze</p>
+                  <p class="mb-0"><?= $no_of_comments ?></p>
+                </div>
+                
+              </div>
+              <div class="row">
+              <div class="col">
+                <a href="user.php?action=edit"><button class="btn btn-warning">Edytuj zdjęcie</button></a>
+                </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+</section>
+
+
+
+<h4 class="text-center mb-3">Twoje komentarze</h4>
+
+<ol class="list-group list-group-numbered container col-5">
+
+ <?php while ($row = mysqli_fetch_assoc($result_comments) ) { ?>
+
+  <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div class="ms-2 me-auto">
+      <div class="fw"><?= $row['content'] ?></div>
+      <div class="text-muted"><a href="details.php?id=<?= $row['post_id'] ?>">Link do posta</a></div>
+    </div>
+  </li>
+  
+
+  <?php } ?>
+</ol>
+
+
+  
+  
+  
+
 <?php }else{?>
 
     
@@ -158,11 +225,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 </div>
 
 
-<button class= "btn btn-success btn-lg mb-4">Save</button>
+<button class= "btn btn-success btn-lg mb-4">Zapisz</button>
 
 </form>
 
-<a href="user.php"><button class= "btn btn-danger btn-lg ">Close</button></a>
+<a href="user.php"><button class= "btn btn-danger btn-lg ">Wróć</button></a>
 
 </div>
 

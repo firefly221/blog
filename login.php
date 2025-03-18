@@ -24,7 +24,7 @@
         }
         else
         {
-            $query = "SELECT * FROM users WHERE email = '$email' AND password = '$password' LIMIT 1";
+            $query = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
             $result = mysqli_query($con,$query);
 
             $num_of_rows = mysqli_num_rows($result);
@@ -32,9 +32,19 @@
             if($num_of_rows)
             {
                 $row = mysqli_fetch_assoc($result);
+                $hashed_password = $row['password'];
+
+                if(password_verify($password,$hashed_password))
+                {
                 $_SESSION['user'] = $row;
                 print_r($_SESSION['user']);
                 header("Location:index.php");
+                die;
+                }
+                else
+                {
+                  exit("Zle hasło");
+                }
             }
             else
             {

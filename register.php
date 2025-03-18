@@ -14,15 +14,65 @@
         $email = $_POST['email'];
         $username = $_POST['username'];
         $password = $_POST['password'];
+
+        //Sprawdzanie czy użytkownik o danym mailu istnieje
+
+        $query = "SELECT * FROM users WHERE email = '$email' OR username = '$username'";
+        $result = mysqli_query($con,$query);
+
+        $num_of_rows = mysqli_num_rows($result);
+
+        if($num_of_rows > 0)
+        {
+          exit("Już istnieje użytkownik o takim loginie lub emailu");
+        }
+
+
+
+        //Sprawdzanie czy użytkownik o danym mailu istnieje
+
+
+
+        //Sprawdzanie siły hasła
+        $errors = array();
+        if(strlen($password) < 6)
+        {
+          array_push($errors,"Haslo powinno mieć więcej niż 6 znaków");
+        }
+        if (!preg_match("/\d/", $password)) {
+          $errors[] = "Hasło powinno mieć przynajmniej jedną liczbę";
+        }
+        if (!preg_match("/[A-Z]/", $password)) {
+            $errors[] = "Hasło powinno mieć przynajmniej jedną dużą literę";
+        }
+        if (!preg_match("/\W/", $password)) {
+            $errors[] = "Hasło powinno zawierać jakiś znak specjalny";
+        }
+        
+        if($errors)
+        {
+            $error_message = "";
+            foreach($errors as $error)
+            {
+              $error_message .= ' ' . $error . '<br>';
+            }
+            exit($error_message);
+            die();
+        }
+
+        //Sprawdzanie siły hasła
+
         $date = date('Y-m-d');
 
+        $hashed_password = password_hash($password,PASSWORD_DEFAULT);
 
+        var_dump($hashed_password);
         
-        $query = "INSERT INTO users (username,email,password,date) VALUES('$username','$email','$password','$date')";   
+        $query = "INSERT INTO users (username,email,password,date) VALUES('$username','$email','$hashed_password','$date')";   
             
         $result = mysqli_query($con,$query);
 
-        $query2 = "SELECT * FROM users WHERE email = '$email' AND password = '$password' LIMIT 1";
+        $query2 = "SELECT * FROM users WHERE email = '$email' AND password = '$hashed_password' LIMIT 1";
         $result2 = mysqli_query($con,$query2);
 
         
@@ -32,8 +82,8 @@
             
 
 
-        header("Location: index.php");
-        die;
+       header("Location: index.php");
+      die;
     }
 
 
