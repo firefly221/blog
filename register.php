@@ -17,30 +17,23 @@
         $date = date('Y-m-d');
 
 
-        if(is_empty($email) || is_empty($username) || is_empty($password))
-        {
+        
+        $query = "INSERT INTO users (username,email,password,date) VALUES('$username','$email','$password','$date')";   
             
-        }
-        else
-        {
-            $query = "INSERT INTO users (username,email,password,date) VALUES('$username','$email','$password','$date')";   
-            
-            $result = mysqli_query($con,$query);
+        $result = mysqli_query($con,$query);
 
-            $query2 = "SELECT * FROM users WHERE email = '$email' AND password = '$password' LIMIT 1";
-            $result2 = mysqli_query($con,$query2);
+        $query2 = "SELECT * FROM users WHERE email = '$email' AND password = '$password' LIMIT 1";
+        $result2 = mysqli_query($con,$query2);
 
         
-            $row = mysqli_fetch_assoc($result2);
-            $_SESSION['user'] = $row;
+        $row = mysqli_fetch_assoc($result2);
+        $_SESSION['user'] = $row;
             
             
 
 
-            header("Location: index.php");
-            die;
-
-        }
+        header("Location: index.php");
+        die;
     }
 
 
@@ -84,15 +77,15 @@
 <form method="POST" class="form-inline">
   <div class="form-group col-sm-3">
     <label for="email">Email address</label>
-    <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+    <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
   </div>
   <div class="form-group col-sm-3">
     <label for="username">Username</label>
-    <input name="username" type="text" class="form-control" id="username" placeholder="Username">
+    <input name="username" type="text" class="form-control" id="username" placeholder="Username" required>
   </div>
   <div class="form-group col-sm-3">
     <label for="password">Password</label>
-    <input name="password" type="password" class="form-control" id="password" placeholder="Password">
+    <input name="password" type="password" class="form-control" id="password" placeholder="Password" required>
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

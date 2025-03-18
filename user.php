@@ -13,10 +13,10 @@ if(empty($_SESSION) == true)
 
 
 
-if($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['username']))
+if($_SERVER['REQUEST_METHOD'] == 'POST')
     {
         
-        $username = $_POST['username'];
+        
         $image_changed = false;
 
         if(!empty($_FILES['image']['name']))
@@ -49,7 +49,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['username']))
         {
             $image = 'pic.jpeg';
         }
-        $query = "UPDATE users set username='$username',image='$image' WHERE id = '$id' LIMIT 1";
+        $query = "UPDATE users set image='$image' WHERE id = '$id' LIMIT 1";
             
         $result = mysqli_query($con,$query);
 
@@ -64,10 +64,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['username']))
 
         header("Location: user.php");
         die;
-
-        
     }
-
+    
 
 
 
@@ -137,7 +135,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['username']))
   
   <div class="row">
     <div class="col gy-5">
-    <a href="user.php?action=edit"><button class="btn btn-warning">Edytuj profil</button></a>
+    <a href="user.php?action=edit"><button class="btn btn-warning">Edytuj zdjęcie</button></a>
     </div>
   </div>
 </div>
@@ -152,10 +150,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['username']))
 
 <form method = "POST" enctype="multipart/form-data"> 
 
-<div class="form-group container text-center">
-    
-    <input name="username" type="text" class="form-control mb-5" id="username" placeholder="Username">
-  </div>
+
   
   <div class="form-group container text-center mb-5">
   
